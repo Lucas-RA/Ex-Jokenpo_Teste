@@ -230,4 +230,48 @@ void main() {
       expect(find.text('Computador escolheu: Tesoura'), findsOneWidget);
     });
   });
+
+  group('Placar na tela', () {
+    testWidgets('deve contar as vitórias do jogador', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: JokenpoScreen(
+            computerPlayer: FakeComputerPlayer(Jogada.tesoura),
+          ),
+        ),
+      );
+
+      expect(find.text('Jogador: 0'), findsOneWidget);
+
+      await tester.tap(find.byKey(const Key('pedra')));
+      await tester.pump();
+      await tester.tap(find.byKey(const Key('pedra')));
+      await tester.pump();
+
+      expect(find.text('Jogador: 2'), findsOneWidget);
+      expect(find.text('Computador: 0'), findsOneWidget);
+      expect(find.text('Empates: 0'), findsOneWidget);
+    });
+
+    testWidgets('deve zerar o placar ao tocar em resetar', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: JokenpoScreen(
+            computerPlayer: FakeComputerPlayer(Jogada.tesoura),
+          ),
+        ),
+      );
+
+      await tester.tap(find.byKey(const Key('papel')));
+      await tester.pump();
+
+      expect(find.text('Computador: 1'), findsOneWidget);
+
+      await tester.tap(find.byKey(const Key('resetar')));
+      await tester.pump();
+
+      expect(find.text('Computador: 0'), findsOneWidget);
+      expect(find.text('Escolha sua jogada'), findsOneWidget);
+    });
+  });
 }

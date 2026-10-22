@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../models/jogada.dart';
+import '../models/placar.dart';
 import '../services/jokenpo_service.dart';
 import '../services/player.dart';
 
@@ -15,6 +16,7 @@ class JokenpoScreen extends StatefulWidget {
 
 class _JokenpoScreenState extends State<JokenpoScreen> {
   final JokenpoService service = JokenpoService();
+  final Placar placar = Placar();
 
   Jogada? jogadaUsuario;
   Jogada? jogadaComputador;
@@ -29,13 +31,41 @@ class _JokenpoScreenState extends State<JokenpoScreen> {
       jogadaComputador = computador;
 
       resultado = service.verificarResultado(jogador, computador);
+
+      if (resultado == 'Empate') {
+        placar.registrarEmpate();
+      } else if (resultado == 'Você venceu!') {
+        placar.registrarVitoriaJogador();
+      } else {
+        placar.registrarVitoriaComputador();
+      }
+    });
+  }
+
+  void resetar() {
+    setState(() {
+      placar.resetar();
+      jogadaUsuario = null;
+      jogadaComputador = null;
+      resultado = 'Escolha sua jogada';
     });
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text('Jokenpô'), centerTitle: true),
+      appBar: AppBar(
+        title: const Text('Jokenpô'),
+        centerTitle: true,
+        actions: [
+          IconButton(
+            key: const Key('resetar'),
+            tooltip: 'Zerar placar',
+            onPressed: resetar,
+            icon: const Icon(Icons.refresh),
+          ),
+        ],
+      ),
 
       body: SafeArea(
         child: Padding(
@@ -46,6 +76,26 @@ class _JokenpoScreenState extends State<JokenpoScreen> {
                 child: SingleChildScrollView(
                   child: Column(
                     children: [
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          Text(
+                            'Jogador: ${placar.jogador}',
+                            key: const Key('placar_jogador'),
+                          ),
+                          Text(
+                            'Computador: ${placar.computador}',
+                            key: const Key('placar_computador'),
+                          ),
+                          Text(
+                            'Empates: ${placar.empates}',
+                            key: const Key('placar_empates'),
+                          ),
+                        ],
+                      ),
+
+                      const SizedBox(height: 24),
+
                       _JogadaSelecionada(
                         titulo: 'Sua jogada',
                         jogada: jogadaUsuario,
