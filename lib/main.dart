@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import 'models/jogada.dart';
 import 'services/jokenpo_service.dart';
 
 void main() {
@@ -22,8 +23,8 @@ class _JokenpoScreenState extends State<JokenpoScreen> {
 
   String resultado = 'Escolha sua jogada';
 
-  void jogar(String jogador) {
-    final jogadas = ['pedra', 'papel', 'tesoura'];
+  void jogar(Jogada jogador) {
+    final jogadas = Jogada.values;
 
     final computador = jogadas[Random().nextInt(jogadas.length)];
 
@@ -45,15 +46,15 @@ class _JokenpoScreenState extends State<JokenpoScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceEvenly,
             children: [
               ElevatedButton(
-                onPressed: () => jogar('pedra'),
+                onPressed: () => jogar(Jogada.pedra),
                 child: const Text('Pedra'),
               ),
               ElevatedButton(
-                onPressed: () => jogar('papel'),
+                onPressed: () => jogar(Jogada.papel),
                 child: const Text('Papel'),
               ),
               ElevatedButton(
-                onPressed: () => jogar('tesoura'),
+                onPressed: () => jogar(Jogada.tesoura),
                 child: const Text('Tesoura'),
               ),
             ],
