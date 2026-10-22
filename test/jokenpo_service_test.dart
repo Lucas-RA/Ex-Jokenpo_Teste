@@ -2,36 +2,51 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:jokenpo_teste/services/jokenpo_service.dart';
 
 void main() {
-  test('pedra deve vencer tesoura', () {
-    // Arrange
-    final service = JokenpoService();
+  late JokenpoService service;
 
-    // Act
-    final resultado = service.verificarResultado('pedra', 'tesoura');
-
-    // Assert
-    expect(resultado, 'Você venceu!');
+  setUp(() {
+    service = JokenpoService();
   });
 
-  test('pedra deve empatar com pedra', () {
-    // Arrange
-    final service = JokenpoService();
+  group('Empates', () {
+    test('pedra x pedra', () {
+      expect(service.verificarResultado('pedra', 'pedra'), 'Empate');
+    });
 
-    // Act
-    final resultado = service.verificarResultado('pedra', 'pedra');
+    test('papel x papel', () {
+      expect(service.verificarResultado('papel', 'papel'), 'Empate');
+    });
 
-    // Assert
-    expect(resultado, 'Empate');
+    test('tesoura x tesoura', () {
+      expect(service.verificarResultado('tesoura', 'tesoura'), 'Empate');
+    });
   });
 
-  test('pedra deve perder para papel', () {
-    // Arrange
-    final service = JokenpoService();
+  group('Vitórias', () {
+    test('pedra vence tesoura', () {
+      expect(service.verificarResultado('pedra', 'tesoura'), 'Você venceu!');
+    });
 
-    // Act
-    final resultado = service.verificarResultado('pedra', 'papel');
+    test('papel vence pedra', () {
+      expect(service.verificarResultado('papel', 'pedra'), 'Você venceu!');
+    });
 
-    // Assert
-    expect(resultado, 'Você perdeu!');
+    test('tesoura vence papel', () {
+      expect(service.verificarResultado('tesoura', 'papel'), 'Você venceu!');
+    });
+  });
+
+  group('Derrotas', () {
+    test('pedra perde para papel', () {
+      expect(service.verificarResultado('pedra', 'papel'), 'Você perdeu!');
+    });
+
+    test('papel perde para tesoura', () {
+      expect(service.verificarResultado('papel', 'tesoura'), 'Você perdeu!');
+    });
+
+    test('tesoura perde para pedra', () {
+      expect(service.verificarResultado('tesoura', 'pedra'), 'Você perdeu!');
+    });
   });
 }
