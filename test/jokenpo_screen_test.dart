@@ -79,4 +79,68 @@ void main() {
 
     expect(find.text('Empate'), findsOneWidget);
   });
+
+  testWidgets('deve apresentar o estado inicial da partida', (tester) async {
+    final fakeComputer = FakeComputerPlayer(Jogada.tesoura);
+
+    await tester.pumpWidget(
+      MaterialApp(home: JokenpoScreen(computerPlayer: fakeComputer)),
+    );
+
+    expect(find.text('Selecione uma opção'), findsOneWidget);
+    expect(find.text('Aguardando sua jogada'), findsOneWidget);
+    expect(find.text('Escolha sua jogada'), findsOneWidget);
+  });
+
+  testWidgets('deve mostrar Pedra como jogada do usuário', (tester) async {
+    final fakeComputer = FakeComputerPlayer(Jogada.tesoura);
+
+    await tester.pumpWidget(
+      MaterialApp(home: JokenpoScreen(computerPlayer: fakeComputer)),
+    );
+
+    await tester.tap(find.byKey(const Key('pedra')));
+    await tester.pump();
+
+    expect(find.byKey(const Key('usuario_jogada')), findsOneWidget);
+    expect(find.text('Pedra'), findsWidgets);
+  });
+
+  testWidgets('deve mostrar Tesoura como jogada do computador', (tester) async {
+    final fakeComputer = FakeComputerPlayer(Jogada.tesoura);
+
+    await tester.pumpWidget(
+      MaterialApp(home: JokenpoScreen(computerPlayer: fakeComputer)),
+    );
+
+    await tester.tap(find.byKey(const Key('pedra')));
+    await tester.pump();
+
+    expect(find.byKey(const Key('computador_jogada')), findsOneWidget);
+    expect(find.text('Tesoura'), findsWidgets);
+  });
+
+  testWidgets('pedra deve vencer tesoura e mostrar as duas jogadas', (
+    tester,
+  ) async {
+    final fakeComputer = FakeComputerPlayer(Jogada.tesoura);
+
+    await tester.pumpWidget(
+      MaterialApp(home: JokenpoScreen(computerPlayer: fakeComputer)),
+    );
+
+    await tester.tap(find.byKey(const Key('pedra')));
+    await tester.pump();
+
+    final usuario = tester.widget<Text>(
+      find.byKey(const Key('usuario_jogada')),
+    );
+    final computador = tester.widget<Text>(
+      find.byKey(const Key('computador_jogada')),
+    );
+
+    expect(usuario.data, 'Pedra');
+    expect(computador.data, 'Tesoura');
+    expect(find.text('Você venceu!'), findsOneWidget);
+  });
 }
