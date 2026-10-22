@@ -143,4 +143,91 @@ void main() {
     expect(computador.data, 'Tesoura');
     expect(find.text('Você venceu!'), findsOneWidget);
   });
+
+  group('Exercícios', () {
+    // Exercício 2
+    testWidgets('inicialmente deve apresentar "Escolha sua jogada"', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: JokenpoScreen(computerPlayer: FakeComputerPlayer(Jogada.pedra)),
+        ),
+      );
+
+      final resultado = tester.widget<Text>(find.byKey(const Key('resultado')));
+
+      expect(resultado.data, 'Escolha sua jogada');
+    });
+
+    // Exercício 3 (os botões da interface final são FilledButton)
+    testWidgets('deve existir exatamente três botões na tela', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: JokenpoScreen(computerPlayer: FakeComputerPlayer(Jogada.pedra)),
+        ),
+      );
+
+      expect(find.byType(FilledButton), findsNWidgets(3));
+    });
+
+    // Exercício 4: computador sempre escolhe pedra
+    testWidgets('pedra x pedra deve empatar', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: JokenpoScreen(computerPlayer: FakeComputerPlayer(Jogada.pedra)),
+        ),
+      );
+
+      await tester.tap(find.byKey(const Key('pedra')));
+      await tester.pump();
+
+      expect(find.text('Empate'), findsOneWidget);
+    });
+
+    testWidgets('papel x pedra deve vencer', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: JokenpoScreen(computerPlayer: FakeComputerPlayer(Jogada.pedra)),
+        ),
+      );
+
+      await tester.tap(find.byKey(const Key('papel')));
+      await tester.pump();
+
+      expect(find.text('Você venceu!'), findsOneWidget);
+    });
+
+    testWidgets('tesoura x pedra deve perder', (tester) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: JokenpoScreen(computerPlayer: FakeComputerPlayer(Jogada.pedra)),
+        ),
+      );
+
+      await tester.tap(find.byKey(const Key('tesoura')));
+      await tester.pump();
+
+      expect(find.text('Você perdeu!'), findsOneWidget);
+    });
+
+    // Exercício 5
+    testWidgets('deve mostrar "Você escolheu" e "Computador escolheu"', (
+      tester,
+    ) async {
+      await tester.pumpWidget(
+        MaterialApp(
+          home: JokenpoScreen(
+            computerPlayer: FakeComputerPlayer(Jogada.tesoura),
+          ),
+        ),
+      );
+
+      await tester.tap(find.byKey(const Key('pedra')));
+      await tester.pump();
+
+      expect(find.text('Você escolheu: Pedra'), findsOneWidget);
+      expect(find.text('Computador escolheu: Tesoura'), findsOneWidget);
+    });
+  });
 }

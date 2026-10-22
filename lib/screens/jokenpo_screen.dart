@@ -69,14 +69,34 @@ class _JokenpoScreenState extends State<JokenpoScreen> {
                           padding: const EdgeInsets.all(24),
                           child: SizedBox(
                             width: double.infinity,
-                            child: Text(
-                              resultado,
-                              key: const Key('resultado'),
-                              textAlign: TextAlign.center,
-                              style: const TextStyle(
-                                fontSize: 24,
-                                fontWeight: FontWeight.bold,
-                              ),
+                            child: Column(
+                              children: [
+                                Text(
+                                  resultado,
+                                  key: const Key('resultado'),
+                                  textAlign: TextAlign.center,
+                                  style: const TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+
+                                if (jogadaUsuario != null &&
+                                    jogadaComputador != null) ...[
+                                  const SizedBox(height: 12),
+
+                                  Text(
+                                    'Você escolheu: ${jogadaUsuario!.titulo}',
+                                    key: const Key('texto_usuario'),
+                                  ),
+
+                                  Text(
+                                    'Computador escolheu: '
+                                    '${jogadaComputador!.titulo}',
+                                    key: const Key('texto_computador'),
+                                  ),
+                                ],
+                              ],
                             ),
                           ),
                         ),
