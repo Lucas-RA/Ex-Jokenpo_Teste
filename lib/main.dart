@@ -2,6 +2,8 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+import 'services/jokenpo_service.dart';
+
 void main() {
   runApp(
     const MaterialApp(debugShowCheckedModeBanner: false, home: JokenpoScreen()),
@@ -16,6 +18,8 @@ class JokenpoScreen extends StatefulWidget {
 }
 
 class _JokenpoScreenState extends State<JokenpoScreen> {
+  final service = JokenpoService();
+
   String resultado = 'Escolha sua jogada';
 
   void jogar(String jogador) {
@@ -23,17 +27,9 @@ class _JokenpoScreenState extends State<JokenpoScreen> {
 
     final computador = jogadas[Random().nextInt(jogadas.length)];
 
-    if (jogador == computador) {
-      resultado = 'Empate';
-    } else if (jogador == 'pedra' && computador == 'tesoura' ||
-        jogador == 'papel' && computador == 'pedra' ||
-        jogador == 'tesoura' && computador == 'papel') {
-      resultado = 'Você venceu!';
-    } else {
-      resultado = 'Você perdeu!';
-    }
-
-    setState(() {});
+    setState(() {
+      resultado = service.verificarResultado(jogador, computador);
+    });
   }
 
   @override
