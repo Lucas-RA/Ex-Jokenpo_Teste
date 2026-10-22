@@ -1,8 +1,7 @@
-import 'dart:math';
-
 import 'package:flutter/material.dart';
 
 import '../models/jogada.dart';
+import '../services/computer_player.dart';
 import '../services/jokenpo_service.dart';
 
 class JokenpoScreen extends StatefulWidget {
@@ -14,13 +13,12 @@ class JokenpoScreen extends StatefulWidget {
 
 class _JokenpoScreenState extends State<JokenpoScreen> {
   final service = JokenpoService();
+  final computerPlayer = ComputerPlayer();
 
   String resultado = 'Escolha sua jogada';
 
   void jogar(Jogada jogador) {
-    final jogadas = Jogada.values;
-
-    final computador = jogadas[Random().nextInt(jogadas.length)];
+    final computador = computerPlayer.jogar();
 
     setState(() {
       resultado = service.verificarResultado(jogador, computador);
