@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 
 import '../models/jogada.dart';
-import '../services/computer_player.dart';
 import '../services/jokenpo_service.dart';
+import '../services/player.dart';
 
 class JokenpoScreen extends StatefulWidget {
-  const JokenpoScreen({super.key});
+  final Player computerPlayer;
+
+  const JokenpoScreen({super.key, required this.computerPlayer});
 
   @override
   State<JokenpoScreen> createState() => _JokenpoScreenState();
@@ -13,12 +15,11 @@ class JokenpoScreen extends StatefulWidget {
 
 class _JokenpoScreenState extends State<JokenpoScreen> {
   final service = JokenpoService();
-  final computerPlayer = ComputerPlayer();
 
   String resultado = 'Escolha sua jogada';
 
   void jogar(Jogada jogador) {
-    final computador = computerPlayer.jogar();
+    final computador = widget.computerPlayer.jogar();
 
     setState(() {
       resultado = service.verificarResultado(jogador, computador);

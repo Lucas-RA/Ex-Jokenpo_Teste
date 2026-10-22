@@ -1,8 +1,10 @@
 import 'dart:math';
 
 import '../models/jogada.dart';
+import 'player.dart';
 
-class ComputerPlayer {
+class ComputerPlayer implements Player {
+  @override
   Jogada jogar() {
     final jogadas = Jogada.values;
 
