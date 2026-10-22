@@ -6,4 +6,18 @@ class Placar {
   void registrarVitoriaJogador() {
     jogador++;
   }
+
+  void registrarVitoriaComputador() {
+    computador++;
+  }
+
+  void registrarEmpate() {
+    empates++;
+  }
+
+  void resetar() {
+    jogador = 0;
+    computador = 0;
+    empates = 0;
+  }
 }
